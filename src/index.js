@@ -25,5 +25,15 @@ app.post('/account', (req, res) => {
 
 });
 
+app.get('/statement/:cpf', (req, res) => {
+  const { cpf } = req.params;
+
+  const customer = customers.find(customer => customer.cpf === cpf);
+
+  if (!customer) return res.send('Customer does not exist!');
+
+  return res.json(customer.statement);
+
+});
 
 app.listen(3333, () => console.log("Server is running!"));
