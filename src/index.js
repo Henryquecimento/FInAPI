@@ -49,4 +49,22 @@ app.get('/statement', verifyIfCpfExists, (req, res) => {
 
 });
 
+app.post('/deposit', verifyIfCpfExists, (req, res) => {
+  const { description, amount } = req.body;
+
+  const { customer } = req;
+
+  customer.statement.push({
+    description,
+    amount,
+    created_at: new Date(),
+    type: "credit"
+  });
+
+  return res.status(201).json({
+    message: "Deposit was performed successfully!"
+  })
+
+});
+
 app.listen(3333, () => console.log("Server is running!"));
