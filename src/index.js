@@ -104,4 +104,20 @@ app.get('/statement/date', verifyIfCpfExists, (req, res) => {
   return res.status(200).json(statement);
 });
 
+app.put('/account', verifyIfCpfExists, (req, res) => {
+  const { name } = req.body;
+  const { customer } = req;
+
+  customer.name = name;
+
+  return res.json({ message: "Update was performed successfully!" });
+});
+
+app.get('/account', verifyIfCpfExists, (req, res) => {
+  const { customer } = req;
+
+  return res.json(customer);
+});
+
+
 app.listen(3333, () => console.log("Server is running!"));
