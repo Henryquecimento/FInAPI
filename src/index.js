@@ -67,12 +67,14 @@ app.post('/deposit', verifyIfCpfExists, (req, res) => {
 
   const { customer } = req;
 
-  customer.statement.push({
+  const statementOperation = {
     description,
     amount,
     created_at: new Date(),
     type: "credit"
-  });
+  }
+
+  customer.statement.push(statementOperation);
 
   return res.status(201).json({
     message: "Deposit was performed successfully!"
@@ -87,6 +89,14 @@ app.post('/withdraw', verifyIfCpfExists, (req, res) => {
   const balance = getBalance(customer.statement);
 
   if (balance < amount) return res.status(400).json({ error: "Insufficient funds" })
+
+  const statementOperation = {
+    amount,
+    created_at: new Date(),
+    type: "debit"
+  }
+
+  customer.statement.push(statementOperation);
 
   return res.status(200).json({ message: "Withdraw was performed successfully!" });
 
