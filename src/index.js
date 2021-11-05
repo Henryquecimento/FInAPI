@@ -92,4 +92,16 @@ app.post('/withdraw', verifyIfCpfExists, (req, res) => {
 
 });
 
+app.get('/statement/date', verifyIfCpfExists, (req, res) => {
+  const { customer } = req;
+  const { date } = req.query;
+
+  const dateFormat = new Date(date + " 00:00");
+
+  const statement = customer.statement.filter((statement) =>
+    statement.created_at.toDateString() === new Date(dateFormat).toDateString());
+
+  return res.status(200).json(statement);
+});
+
 app.listen(3333, () => console.log("Server is running!"));
